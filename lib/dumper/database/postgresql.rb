@@ -10,7 +10,7 @@ module Dumper
       end
 
       def file_ext
-        if @dumper_options[:format] == :dump
+        if @dumper_options[:format] == :custom
           'dump.gz'
         else
           'sql.gz'
@@ -26,7 +26,7 @@ module Dumper
           next if @config[option].blank?
           "--#{option}='#{@config[option]}'".gsub('--socket', '--host')
         end
-        if @dumper_options[:format] == :dump
+        if @dumper_options[:format] == :custom
           options += %w{-Fc --no-acl --no-owner}
         end
         options.compact.join(' ')
