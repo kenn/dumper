@@ -3,9 +3,8 @@ module Dumper
     class PostgreSQL < Base
       DUMP_TOOL = 'pg_dump'
 
-      def initialize
-        super
-        @dumper_options = {
+      def default_dumper_options
+        {
           :format => :sql
         }
       end
