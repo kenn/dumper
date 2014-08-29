@@ -2,17 +2,35 @@ module Dumper
   module Database
     class PostgreSQL < Base
       DUMP_TOOL = 'pg_dump'
-      FILE_EXT = 'sql.gz'
+
+      def initialize
+        super
+        @dumper_options = {
+          :format => :sql
+        }
+      end
+
+      def file_ext
+        if @dumper_options[:format] == :dump
+          'dump.gz'
+        else
+          'sql.gz'
+        end
+      end
 
       def command
         "cd #{tmpdir} && #{password_variable} #{dump_tool_path} #{connection_options} #{@config[:database]} | gzip > #{filename}"
       end
 
       def connection_options
-        [ :host, :port, :socket, :username ].map do |option|
+        options = [ :host, :port, :socket, :username ].map do |option|
           next if @config[option].blank?
           "--#{option}='#{@config[option]}'".gsub('--socket', '--host')
-        end.compact.join(' ')
+        end
+        if @dumper_options[:format] == :dump
+          options += %w{-Fc --no-acl --no-owner}
+        end
+        options.compact.join(' ')
       end
 
       def password_variable
