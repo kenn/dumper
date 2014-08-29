@@ -3,7 +3,7 @@ module Dumper
     class Base
       include Dumper::Utility::ObjectFinder
 
-      attr_accessor :tmpdir, :filename, :config
+      attr_accessor :tmpdir, :filename, :config, :dumper_options
 
       def file_ext
         self.class::FILE_EXT

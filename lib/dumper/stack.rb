@@ -31,9 +31,11 @@ module Dumper
         MongoMapper.database # Trigger to create a Mongo::DB instance
       end
 
+      dumper_options = options[:dumper_options] || {}
       DATABASES.each do |key, klass|
         database = klass.new
         next unless database.set_config_for(@rails_env) || database.set_config_for(options[:additional_env])
+        database.dumper_options = dumper_options[key] || {}
         @databases[key] = database
       end
 
